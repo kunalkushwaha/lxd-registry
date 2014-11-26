@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
-	//"log"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
@@ -22,17 +20,6 @@ type Command struct {
 	DELETE       func(w http.ResponseWriter, r *http.Request)
 }
 
-var api10 = []Command{
-	pingStatus,
-	listCmd,
-}
-
-type resp struct {
-	Type     string      `json:"type"`
-	Result   string      `json:"result"`
-	Metadata interface{} `json:"metadata"`
-}
-
 func main() {
 	d := &Daemon{}
 	d.mux = mux.NewRouter()
@@ -41,28 +28,16 @@ func main() {
 		SyncResponse(true, "Welcome to lxd-registery!!", w)
 	})
 
-	for _, c := range api10 {
+	for _, c := range Api10 {
 		d.createCmd("1.0", c)
 	}
-	
+
 	fmt.Printf("lxd-Registery started....\n")
 	fmt.Printf("Listening at <IP>:8080/\n")
 	http.Handle("/", d.mux)
 	// wait for clients
 	http.ListenAndServe(":8080", nil)
 }
-
-func PingResponse(w http.ResponseWriter, req *http.Request) {
-	SyncResponse(true, "Server Alive!", w)
-}
-
-var pingStatus = Command{"pingStatus", true, PingResponse, nil, nil, nil}
-
-func ListCmdResponse(w http.ResponseWriter, req *http.Request) {
-	SyncResponse(true, "List Cmd!", w)
-}
-
-var listCmd = Command{"listCmd", true, ListCmdResponse, nil, nil, nil}
 
 func (d *Daemon) createCmd(version string, c Command) {
 	var uri string
@@ -101,25 +76,4 @@ func (d *Daemon) createCmd(version string, c Command) {
 			}
 		}
 	})
-}
-
-func SyncResponse(success bool, metadata interface{}, w http.ResponseWriter) {
-	result := "success"
-	if !success {
-		result = "failure"
-	}
-
-	r := resp{Type: "Resp", Result: result, Metadata: metadata}
-	enc, err := json.Marshal(&r)
-	if err != nil {
-		//InternalError(w, err)
-		return
-	}
-	fmt.Printf(string(enc))
-
-	w.Write(enc)
-}
-
-func NotImplemented(w http.ResponseWriter) {
-	SyncResponse(true, "Not Implemented!!", w)
 }
