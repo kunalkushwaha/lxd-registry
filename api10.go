@@ -1,6 +1,7 @@
 package main
 
 import (
+	//	"fmt"
 	"net/http"
 )
 
@@ -10,6 +11,8 @@ var Api10 = []Command{
 	getImage,
 }
 
+var ApiList = []string{}
+
 func PingResponse(w http.ResponseWriter, req *http.Request) {
 	SyncResponse(true, "Server Alive!", w)
 }
@@ -17,7 +20,7 @@ func PingResponse(w http.ResponseWriter, req *http.Request) {
 var pingStatus = Command{"pingStatus", true, PingResponse, nil, nil, nil}
 
 func ListCmdResponse(w http.ResponseWriter, req *http.Request) {
-	SyncResponse(true, "List Cmd!", w)
+	SyncResponse(true, ApiList, w)
 }
 
 var listCmd = Command{"listCmd", true, ListCmdResponse, nil, nil, nil}

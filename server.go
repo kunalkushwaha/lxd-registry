@@ -46,6 +46,7 @@ func (d *Daemon) createCmd(version string, c Command) {
 	} else {
 		uri = fmt.Sprintf("/%s/%s", version, c.name)
 	}
+	ApiList = append(ApiList, uri)
 
 	d.mux.HandleFunc(uri, func(w http.ResponseWriter, r *http.Request) {
 
