@@ -53,7 +53,7 @@ curl -v <IP>:8080/1.0/listCmd
 < 
 * Connection #0 to host 192.168.11.9 left intact
 * Closing connection #0
-{"type":"Resp","result":"success","metadata":"List Cmd!"}
+{"type":"Resp","result":"success","metadata":["/1.0/pingStatus","/1.0/listCmd","/1.0/getImage"]}
 ```
 
 ```shell
