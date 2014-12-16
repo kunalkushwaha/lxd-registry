@@ -75,4 +75,4 @@ curl <IP>:8080/1.0/getImage/ubuntu32
 * Closing connection #0
 ```
 
-
+This project is not active now
